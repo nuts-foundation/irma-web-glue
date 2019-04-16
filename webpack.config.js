@@ -70,5 +70,9 @@ module.exports = {
 			minSize: 30000,
 			name: true
 		}
+	},
+
+	devServer: {
+		contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist')]
 	}
 };
