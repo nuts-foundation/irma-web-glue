@@ -1,5 +1,2 @@
-let strings = ["Hello World!"];
-
-strings.forEach((s) => {
-  console.log(s);
-});
+import IrmaWebGlue from "./irma-web-glue";
+window.irmaWebGlue = IrmaWebGlue;
