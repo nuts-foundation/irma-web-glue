@@ -14,8 +14,9 @@ export default class IrmaWebGlue {
     this._renderEngine.render(state);
 
     // Catch fail states
+    // TODO: States should not be considered fail states if the user can recover from them
     if (['Cancelled', 'TimedOut', 'Error', 'BrowserNotSupported'].includes(state) && this._reject) {
-      this._reject();
+      this._reject(state);
     }
 
     // Catch success state

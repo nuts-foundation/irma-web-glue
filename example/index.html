@@ -44,8 +44,8 @@
         var glue     = new irmaWebGlue(irmaForm, glueOptions);
 
         glue.startSession(server, request)
-            .then(function() { alert("Succesful disclosure!") })
-            .catch(function() { alert("Disclosure failed :/") });
+            .then(function() { alert("Successful disclosure!") })
+            .catch(function(s) { alert("Disclosure failed in state '"+s+"' :/") });
 
       });
     </script>
