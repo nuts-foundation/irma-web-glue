@@ -54,7 +54,7 @@ from your own project.
 You can then import the `irmaWebGlue` class like so:
 
 ```javascript
-import irmaWebGlue from "./irma-web-glue";
+import irmaWebGlue from "nuts-foundation/irma-web-glue";
 ```
 
 ### Usage
@@ -84,9 +84,9 @@ instance of the `irmaWebGlue` class:
 let irmaForm = document.getElementById('irma-web-form');
 let glue     = new irmaWebGlue(irmaForm, glueOptions);
 
-glue.startSession(server, request)
-    .then(function() { alert("Successful disclosure!") })
-    .catch(function(s) { alert("Disclosure failed in state '"+s+"' :/") });
+glue.startFlow(server, request)
+    .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })
+    .catch(function(state) { alert("Disclosure failed in state '" + state + "' 🤨") });
 ```
 
 `irma-web-form` in this case is the ID of an element that `irma-web-glue` will

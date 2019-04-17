@@ -21,11 +21,12 @@ export default class IrmaWebGlue {
 
     // Catch success state
     if (state == 'Success' && this._resolve) {
-      setTimeout(() => this._resolve(), 1000);
+      // Give a delay for the user to see the success state
+      setTimeout(() => this._resolve(this._flowResult), 1000);
     }
   }
 
-  startSession(server, request) {
+  startFlow(server, request) {
     this._stateMachine.transition('initialize');
 
     return new Promise((resolve, reject) => {
@@ -52,12 +53,12 @@ export default class IrmaWebGlue {
     };
 
     irma.handleSession(sessionPtr, irmaOptions)
-        .then(({d}) => this._handleDone(d))
+        .then((d) => this._handleDone(d))
         .catch(() => this._stateMachine.transition('fail'));
   }
 
   _handleDone(result) {
-    console.log('Done', result);
+    this._flowResult = result;
     this._stateMachine.transition('succeed');
   }
 
