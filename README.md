@@ -1,16 +1,21 @@
 # IRMA web glue
 
-This package is a semi-drop-in-replacement for the [`irmajs`](https://github.com/privacybydesign/irmajs)
-package. It takes `irmajs` and adds some magic of its own to make the whole IRMA
+This package provides the glue between IRMA flow styling and IRMA flow logic. It
+has been set up to make it easy to swap out different designs (markup and css)
+and/or different logic that communicates with an IRMA back-end. These two worlds
+communicate with each other through manipulating a state machine.
+
+This package is designed as a semi-drop-in-replacement for the [`irmajs`](https://github.com/privacybydesign/irmajs)
+package. If you replace `irmajs` with this package it will make the whole IRMA
 flow look and act like [`irma-web-frontend`](https://github.com/nuts-foundation/irma-web-frontend).
 
-This package has been designed and tested to work with the browsers Chrome,
+TODO: This package has been designed and tested to work with the browsers Chrome,
 Firefox, Safari, Opera, Edge and IE11.
 
 ## Current state
 
-It's still pretty much in Alpha and we also need some changes in `irmajs` to
-make the last bits actually work. So please check back in a couple of weeks 😄
+We need some changes in `irmajs` to make the last bits of this package actually
+work. So please check back in a couple of weeks 😄
 
 ## Design considerations
 
@@ -82,7 +87,7 @@ instance of the `irmaWebGlue` class:
 ```javascript
 // Initialize irma-web-glue
 let irmaForm = document.getElementById('irma-web-form');
-let glue     = new irmaWebGlue(irmaForm, glueOptions);
+let glue     = new irmaWebGlue(irmaForm);
 
 glue.startFlow(server, request)
     .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })
@@ -91,7 +96,7 @@ glue.startFlow(server, request)
 
 `irma-web-form` in this case is the ID of an element that `irma-web-glue` will
 render the interface in to. To prevent flickering, it helps if this element has
-already been pre-filled with the right markup:
+already been pre-filled with the right markup. For `irma-web-frontend` this is:
 
 ```html
 <section class="irma-web-form" id="irma-web-form">
@@ -110,10 +115,22 @@ already been pre-filled with the right markup:
 </section>
 ```
 
-You can use the `glueOptions` hash to override some behaviour and all the
-strings used in the front-end (for example to implement translations). See
-`example/index.html` or `src/irma-web-glue.js` for more information on these
-options.
+You can override some behaviour and all the strings used in the front-end (for
+example to implement translations). See `src/irma-web-glue.js` for all options.
+An example:
+
+```javascript
+const options = {
+  frontEndOptions: {
+    showHelper: true,
+    translations: {
+      helper: 'Hello world 🌍'
+    }
+  }
+};
+
+let glue     = new irmaWebGlue(irmaForm, options);
+```
 
 ## Contributing
 
