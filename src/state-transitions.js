@@ -33,6 +33,7 @@ export default {
 
   ContinueOnPhone: {
     succeed:        'Success',
+    cancel:         'Cancelled',
     restart:        'Uninitialized',
     fail:           'Error'
   },

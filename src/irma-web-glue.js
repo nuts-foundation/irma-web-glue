@@ -1,87 +1,70 @@
 import StateMachine from './state-machine';
-import RenderEngine from './render-engine';
-
-import irma from '@privacybydesign/irmajs';
+import IrmaWebFrontend from './frontends/irma-web';
+import IrmaJSBackend from './backends/irmajs';
 
 export default class IrmaWebGlue {
 
   constructor(element, options) {
-    this._renderEngine = new RenderEngine(element, this._sanitizeOptions(options));
+    options = this._sanitizeOptions(options);
+
+    this._frontend     = new options.frontend(element, options.frontEndOptions);
     this._stateMachine = new StateMachine((s) => this._stateChangeHandler(s));
+    this._backend      = new options.backend(this._stateMachine, options.backendOptions, (r) => this._flowResult = r);
+  }
+
+  startFlow(server, request) {
+    return new Promise((resolve, reject) => {
+      this._resolve = resolve;
+      this._reject  = reject;
+
+      this._backend.startFlow(server, request);
+    });
   }
 
   _stateChangeHandler(state) {
-    this._renderEngine.render(state);
+    this._frontend.render(state);
 
     // Catch fail states
-    // TODO: States should not be considered fail states if the user can recover from them
-    if (['Cancelled', 'TimedOut', 'Error', 'BrowserNotSupported'].includes(state) && this._reject) {
+    // Note: If the user can recover from a state, it's not really a fail state
+    if (state == 'BrowserNotSupported' && this._reject) {
       this._reject(state);
     }
 
     // Catch success state
     if (state == 'Success' && this._resolve) {
-      // Give a delay for the user to see the success state
-      setTimeout(() => this._resolve(this._flowResult), 1000);
+      // Give a delay for the user to actually see the success state
+      setTimeout(() => this._resolve(this._flowResult), 500);
     }
   }
 
-  startFlow(server, request) {
-    this._stateMachine.transition('initialize');
-
-    return new Promise((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject  = reject;
-
-      irma.startSession(server, request)
-          .then(({ sessionPtr, token }) => this._handleSession(server, sessionPtr, token))
-          .catch(() => stateMachine.transition('fail'));
-    });
-  }
-
-  _handleSession(server, sessionPtr, token) {
-    this._stateMachine.transition('showQRCode');
-
-    // Tell Irma how to behave
-    const irmaOptions = {
-      server: server,
-      token: token,
-      method: 'canvas',
-      element: 'irma-web-qr-canvas',
-      disableMobile: true,
-      showConnectedIcon: false
-    };
-
-    irma.handleSession(sessionPtr, irmaOptions)
-        .then((d) => this._handleDone(d))
-        .catch(() => this._stateMachine.transition('fail'));
-  }
-
-  _handleDone(result) {
-    this._flowResult = result;
-    this._stateMachine.transition('succeed');
-  }
-
   _sanitizeOptions(options) {
-    const defaults = {
-      showHelper: false,
-      translations: {
-        header:    'Inloggen met <i class="irma-web-logo">IRMA</i>',
-        helper:    'Kom je er niet uit? Kijk dan eerst eens op <a href="https://privacybydesign.foundation/irma-begin/">de website van IRMA</a>.',
-        loading:   'Eén moment alsjeblieft',
-        button:    'Open IRMA app',
-        qrCode:    'Toon QR code',
-        phone:     'Volg de instructies op je telefoon',
-        retry:     'Opnieuw proberen',
-        cancelled: 'Transactie is geannuleerd',
-        timeout:   'Transactie is verlopen',
-        error:     'Er is een fout opgetreden',
-        browser:   'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
-        success:   'Gelukt!'
+    return Object.assign({
+      frontend:   IrmaWebFrontend,
+      backend:    IrmaJSBackend,
+      frontEndOptions: {
+        showHelper: false,
+        translations: {
+          header:    'Inloggen met <i class="irma-web-logo">IRMA</i>',
+          helper:    'Kom je er niet uit? Kijk dan eerst eens op <a href="https://privacybydesign.foundation/irma-begin/">de website van IRMA</a>.',
+          loading:   'Eén moment alsjeblieft',
+          button:    'Open IRMA app',
+          qrCode:    'Toon QR code',
+          phone:     'Volg de instructies op je telefoon',
+          retry:     'Opnieuw proberen',
+          cancelled: 'Transactie is geannuleerd',
+          timeout:   'Transactie is verlopen',
+          error:     'Er is een fout opgetreden',
+          browser:   'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
+          success:   'Gelukt!'
+        }
+      },
+      backendOptions: {
+        method: 'canvas',
+        element: 'irma-web-qr-canvas',
+        showConnectedIcon: false,
+        disableMobile: true
       }
-    };
-
-    return Object.assign({}, defaults, options);
+    }, options);
   }
 
 }

@@ -1,4 +1,4 @@
-export default class RenderEngine {
+export default class IrmaWebFrontend {
 
   constructor(element, options) {
     this._element = element;
@@ -22,8 +22,8 @@ export default class RenderEngine {
       Uninitialized:       this._stateUninitialized,
       Loading:             this._stateLoading,
       ShowingQRCode:       this._stateShowingQRCode,
-      ShowingButton:       this._stateShowingButton,
-      WaitingForUser:      this._stateWaitingForUser,
+      ShowingIrmaButton:   this._stateShowingIrmaButton,
+      ContinueOnPhone:     this._stateContinueOnPhone,
       Cancelled:           this._stateCancelled,
       TimedOut:            this._stateTimedOut,
       Error:               this._stateError,
@@ -79,7 +79,7 @@ export default class RenderEngine {
     `;
   }
 
-  _stateShowingButton() {
+  _stateShowingIrmaButton() {
     return `
       <!-- State: ShowingButton -->
       <button class="irma-web-button">${this._options.translations.button}</button>
@@ -87,7 +87,7 @@ export default class RenderEngine {
     `;
   }
 
-  _stateWaitingForUser() {
+  _stateContinueOnPhone() {
     return `
       <!-- State: WaitingForUser -->
       <div class="irma-web-waiting-for-user-animation"></div>
