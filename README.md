@@ -14,25 +14,29 @@ Firefox, Safari, Opera, Edge and IE11.
 
 ## Current state
 
-We need some changes in `irmajs` to make the last bits of this package actually
-work. So please check back in a couple of weeks 😄
+This package currently depends on our own fork of `irmajs`. This is until we get
+a [PR approved and merged](https://github.com/privacybydesign/irmajs/pull/1) by
+Privacy By Design. Also, it hasn't been tested on mobile yet. So if these are
+issues for you, please check back in a couple of weeks 😄
 
 ## Design considerations
 
 We want to make embedding an IRMA disclosure flow in your website as simple as
-we can. Because of this we have chosen a slightly simpler API than the `irmajs`
-API. `irma-web-glue` intends to be your one stop shop to import in your project
-and launch into good-looking IRMA flows in the web browser with zero hassle. If
-you feel that we have failed in this regard, please [let us know](https://github.com/nuts-foundation/irma-web-glue/issues)
-😉.
+we can. Because of this we have chosen a similar though slightly simpler API
+than the `irmajs` API. `irma-web-glue` intends to be your one stop shop to
+import in your project and launch into good-looking IRMA flows in the web
+browser with zero hassle. If you feel that we can do better in this regard,
+please [let us know](https://github.com/nuts-foundation/irma-web-glue/issues) 😉.
 
-## Embedding in your application
+## How to use in your application
 
 This package only contains the Javascript part of the IRMA flow, you will have
-to combine it with its CSS counterpart, which is [`irma-web-frontend`](https://github.com/nuts-foundation/irma-web-frontend).
+to combine it with a CSS counterpart like [`irma-web-frontend`](https://github.com/nuts-foundation/irma-web-frontend).
 Or you can choose to write your own styling.
 
-### The old fashioned way
+### Embedding
+
+#### The old fashioned way
 
 There is a normal version and a minified version of the Javascripts [available
 for download on Github](https://github.com/nuts-foundation/irma-web-glue/tree/master/dist)
@@ -41,7 +45,7 @@ that you can include in your own project.
 If you include the `irma-web-glue.js` file in your HTML, you will have
 `IrmaWebGlue` available as a class (on `window`).
 
-### The way the cool kids do it
+#### The way the cool kids do it
 
 Alternatively, you can install it as an npm package. This can be useful if you
 want to use only parts of the package and roll your own glue, if you need to
@@ -115,9 +119,12 @@ already been pre-filled with the right markup. For `irma-web-frontend` this is:
 </section>
 ```
 
-You can override some behaviour and all the strings used in the front-end (for
-example to implement translations). See `src/irma-web-glue.js` for all options.
-An example:
+### Customizing
+
+You can override some behaviour, any `irmajs` options and all the strings used
+in the front-end (for example to implement translations). See
+`src/irma-web-glue.js`, `src/frontends/irma-web.js` and `src/backends/irmajs.js`
+for all options. An example:
 
 ```javascript
 const options = {
@@ -131,6 +138,9 @@ const options = {
 
 let glue = new IrmaWebGlue(irmaForm, options);
 ```
+
+This could do with a good manual or reference. If you feel like writing one, let
+us know 😉
 
 ## Contributing
 
