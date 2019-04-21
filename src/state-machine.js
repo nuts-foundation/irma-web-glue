@@ -6,8 +6,12 @@ const enableDebugging = true;
 export default class StateMachine {
 
   constructor(callback) {
-    this._callback = callback;
-    this._setState('Uninitialized');
+    this._callbacks = [];
+    this._state     = 'Uninitialized';
+  }
+
+  addStateChangeListener(func) {
+    this._callbacks.push(func);
   }
 
   transition(t) {
@@ -30,7 +34,7 @@ export default class StateMachine {
 
   _setState(state) {
     this._state = state;
-    this._callback(this._state);
+    this._callbacks.forEach((f) => f(this._state));
   }
 
 }

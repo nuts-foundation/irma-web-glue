@@ -25,12 +25,6 @@ export default {
     fail:           'Error'
   },
 
-  ShowingIrmaButton: {
-    succeed:        'Success',
-    chooseQR:       'ShowingQRCode',
-    fail:           'Error'
-  },
-
   ContinueOnPhone: {
     succeed:        'Success',
     cancel:         'Cancelled',
@@ -38,16 +32,28 @@ export default {
     fail:           'Error'
   },
 
+  ShowingIrmaButton: {
+    chooseQR:       'ShowingQRCode',
+    openIrmaApp:    'ContinueInApp',
+    fail:           'Error'
+  },
+
+  ContinueInApp: {
+    succeed:        'Success',
+    chooseQR:       'ShowingQRCode',
+    fail:           'Error'
+  },
+
   Cancelled: {
-    restart:        'Uninitialized'
+    restart:        'Loading'
   },
 
   TimedOut: {
-    restart:        'Uninitialized'
+    restart:        'Loading'
   },
 
   Error: {
-    restart:        'Uninitialized'
+    restart:        'Loading'
   },
 
   BrowserNotSupported: {},
