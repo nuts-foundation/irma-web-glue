@@ -24,7 +24,7 @@
 
         // Initialize irma-web-glue
         let irmaForm = document.getElementById('irma-web-form');
-        let glue     = new irmaWebGlue(irmaForm);
+        let glue     = new IrmaWebGlue(irmaForm);
 
         glue.startFlow(server, request)
             .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })

@@ -39,7 +39,7 @@ for download on Github](https://github.com/nuts-foundation/irma-web-glue/tree/ma
 that you can include in your own project.
 
 If you include the `irma-web-glue.js` file in your HTML, you will have
-`window.irmaWebGlue` available as a class.
+`IrmaWebGlue` available as a class (on `window`).
 
 ### The way the cool kids do it
 
@@ -56,10 +56,10 @@ $ npm install nuts-foundation/irma-web-glue
 extra dependency. If you want you can remove any existing dependencies on it
 from your own project.
 
-You can then import the `irmaWebGlue` class like so:
+You can then import the `IrmaWebGlue` class like so:
 
 ```javascript
-import irmaWebGlue from "nuts-foundation/irma-web-glue";
+import IrmaWebGlue from "nuts-foundation/irma-web-glue";
 ```
 
 ### Usage
@@ -87,7 +87,7 @@ instance of the `irmaWebGlue` class:
 ```javascript
 // Initialize irma-web-glue
 let irmaForm = document.getElementById('irma-web-form');
-let glue     = new irmaWebGlue(irmaForm);
+let glue     = new IrmaWebGlue(irmaForm);
 
 glue.startFlow(server, request)
     .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })
@@ -129,7 +129,7 @@ const options = {
   }
 };
 
-let glue     = new irmaWebGlue(irmaForm, options);
+let glue = new IrmaWebGlue(irmaForm, options);
 ```
 
 ## Contributing
