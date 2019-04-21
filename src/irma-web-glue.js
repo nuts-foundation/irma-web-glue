@@ -1,6 +1,6 @@
-import StateMachine from './state-machine';
-import IrmaWebFrontend from './frontends/irma-web';
-import IrmaJSBackend from './backends/irmajs';
+import StateMachine   from './state-machine';
+import * as frontends from './frontends';
+import * as backends  from './backends';
 
 export default class IrmaWebGlue {
 
@@ -39,8 +39,8 @@ export default class IrmaWebGlue {
 
   _sanitizeOptions(options) {
     return Object.assign({
-      frontend:   IrmaWebFrontend,
-      backend:    IrmaJSBackend,
+      frontend: frontends.IrmaWeb,
+      backend:  backends.IrmaJS,
       frontEndOptions: {
         showHelper: false,
         translations: {
@@ -59,10 +59,10 @@ export default class IrmaWebGlue {
         }
       },
       backendOptions: {
-        method: 'canvas',
-        element: 'irma-web-qr-canvas',
+        method:            'canvas',
+        element:           'irma-web-qr-canvas',
         showConnectedIcon: false,
-        disableMobile: true
+        disableMobile:     true
       }
     }, options);
   }
