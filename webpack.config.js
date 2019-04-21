@@ -24,55 +24,92 @@ const path = require('path');
 
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-module.exports = {
-	module: {
-		rules: [
-			{
-				include: [path.resolve(__dirname, 'src')],
-				loader: 'babel-loader',
 
-				options: {
-					plugins: ['syntax-dynamic-import'],
 
-					presets: [
-						[
-							'@babel/preset-env',
-							{
-								modules: false
-							}
-						]
+const sharedModule = {
+	rules: [
+		{
+			include: [path.resolve(__dirname, 'src')],
+			loader: 'babel-loader',
+
+			options: {
+				plugins: ['syntax-dynamic-import'],
+
+				presets: [
+					[
+						'@babel/preset-env',
+						{
+							modules: false
+						}
 					]
-				},
-
-				test: /\.js$/
-			}
-		]
-	},
-
-	output: {
-		chunkFilename: 'irma-web-glue.js',
-		filename: 'irma-web-glue.js'
-	},
-
-	mode: 'development',
-
-	optimization: {
-		splitChunks: {
-			cacheGroups: {
-				vendors: {
-					priority: -10,
-					test: /[\\/]node_modules[\\/]/
-				}
+				]
 			},
 
-			chunks: 'async',
-			minChunks: 1,
-			minSize: 30000,
-			name: true
+			test: /\.js$/
+		}
+	]
+};
+
+const sharedSplitChunks = {
+	cacheGroups: {
+		vendors: {
+			priority: -10,
+			test: /[\\/]node_modules[\\/]/
 		}
 	},
 
-	devServer: {
-		contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist')]
-	}
+	chunks: 'async',
+	minChunks: 1,
+	minSize: 30000,
+	name: true
 };
+
+
+
+module.exports = [
+	{
+		module: sharedModule,
+
+		output: {
+			chunkFilename: 'irma-web-glue-development.js',
+			filename: 'irma-web-glue-development.js'
+		},
+
+		mode: 'development',
+
+		optimization: {
+			splitChunks: sharedSplitChunks
+		},
+
+		devServer: {
+			contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist')],
+			host: '192.168.178.124'
+		}
+	},
+
+	{
+		entry: {
+	    "irma-web-glue": "./src/index.js",
+	    "irma-web-glue.min": "./src/index.js",
+	  },
+
+		module: sharedModule,
+
+		output: {
+			chunkFilename: '[name].js',
+			filename: '[name].js'
+		},
+
+		mode: 'production',
+
+		optimization: {
+			splitChunks: sharedSplitChunks,
+
+			minimize: true,
+	    minimizer: [new UglifyJSPlugin({
+	      include: /\.min\.js$/
+	    })]
+		}
+
+	}
+];
