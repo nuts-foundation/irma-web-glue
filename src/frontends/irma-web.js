@@ -39,6 +39,12 @@ export default class IrmaWebFrontend {
   }
 
   _attachClickHandler() {
+    // Polyfill for Element.matches to fix IE11
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector ||
+                                  Element.prototype.webkitMatchesSelector;
+    }
+
     this._element.addEventListener('click', (e) => {
       if (e.target.matches('[data-irma-glue-transition]')) {
         this._stateMachine.transition(e.target.getAttribute('data-irma-glue-transition'));

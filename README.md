@@ -9,15 +9,15 @@ This package is designed as a semi-drop-in-replacement for the [`irmajs`](https:
 package. If you replace `irmajs` with this package it will make the whole IRMA
 flow look and act like [`irma-web-frontend`](https://github.com/nuts-foundation/irma-web-frontend).
 
-TODO: This package has been designed and tested to work with the browsers Chrome,
+This package has been designed and tested to work with the browsers Chrome,
 Firefox, Safari, Opera, Edge and IE11.
 
 ## Current state
 
 This package currently depends on our own fork of `irmajs`. This is until we get
 a [PR approved and merged](https://github.com/privacybydesign/irmajs/pull/1) by
-Privacy By Design. Also, it hasn't been tested on mobile yet. So if these are
-issues for you, please check back in a couple of weeks 😄
+Privacy By Design. So if this is an issue for you, please check back in a couple
+of weeks 😄
 
 ## Design considerations
 
@@ -86,7 +86,7 @@ const request = {
 ```
 
 But instead of feeding these directly to `irmajs` you hand them to a new
-instance of the `irmaWebGlue` class:
+instance of the `IrmaWebGlue` class:
 
 ```javascript
 // Initialize irma-web-glue
