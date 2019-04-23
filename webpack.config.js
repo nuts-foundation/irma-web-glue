@@ -82,8 +82,8 @@ module.exports = [
 		},
 
 		devServer: {
-			contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist')],
-			host: '192.168.178.124'
+			contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist'), path.join(__dirname, 'node_modules/irma-web-frontend/dist')],
+			disableHostCheck: true
 		}
 	},
 
