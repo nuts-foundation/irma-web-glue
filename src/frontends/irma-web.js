@@ -21,7 +21,9 @@ export default class IrmaWebFrontend {
         button:    'Open IRMA app',
         qrCode:    'Toon QR code',
         phone:     'Volg de instructies op je telefoon',
+        app:       'Volg de instructies in de IRMA app',
         retry:     'Opnieuw proberen',
+        back:      'Ga terug',
         cancelled: 'Je hebt het proces geannuleerd',
         timeout:   'We hebben te lang niks van je gehoord',
         error:     'Er is een fout opgetreden',
@@ -48,6 +50,15 @@ export default class IrmaWebFrontend {
     let newPartial = this._stateToPartialMapping()[state];
     if (!newPartial) throw new Error(`I don't know how to render '${state}'`);
 
+    if (state == 'ContinueInApp') {
+      // Add a tiny delay so we don't see the flicker when switching to the app
+      window.setTimeout(() => this._renderPartial(newPartial), 200);
+    } else {
+      this._renderPartial(newPartial);
+    }
+  }
+
+  _renderPartial(newPartial) {
     this._element
         .querySelector('.content .centered')
         .innerHTML = newPartial.call(this);
@@ -55,17 +66,18 @@ export default class IrmaWebFrontend {
 
   _stateToPartialMapping() {
     return {
-      Uninitialized:       this._stateUninitialized,
-      Loading:             this._stateLoading,
-      ShowingQRCode:       this._stateShowingQRCode,
-      ContinueOnPhone:     this._stateContinueOnPhone,
-      ShowingIrmaButton:   this._stateShowingIrmaButton,
-      ContinueInApp:       this._stateShowingIrmaButton,
-      Cancelled:           this._stateCancelled,
-      TimedOut:            this._stateTimedOut,
-      Error:               this._stateError,
-      BrowserNotSupported: this._stateBrowserNotSupported,
-      Success:             this._stateSuccess
+      Uninitialized:        this._stateUninitialized,
+      Loading:              this._stateLoading,
+      ShowingQRCode:        this._stateShowingQRCode,
+      ContinueOnPhone:      this._stateContinueOnPhone,
+      ShowingIrmaButton:    this._stateShowingIrmaButton,
+      ShowingQRCodeInstead: this._stateShowingQRCodeInstead,
+      ContinueInApp:        this._stateContinueInApp,
+      Cancelled:            this._stateCancelled,
+      TimedOut:             this._stateTimedOut,
+      Error:                this._stateError,
+      BrowserNotSupported:  this._stateBrowserNotSupported,
+      Success:              this._stateSuccess
     };
   }
 
@@ -116,6 +128,15 @@ export default class IrmaWebFrontend {
     `;
   }
 
+  _stateContinueOnPhone() {
+    return `
+      <!-- State: WaitingForUser -->
+      <div class="irma-web-waiting-for-user-animation"></div>
+      <p>${this._options.translations.phone}</p>
+      <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
+    `;
+  }
+
   _stateShowingIrmaButton() {
     return `
       <!-- State: ShowingButton -->
@@ -124,11 +145,20 @@ export default class IrmaWebFrontend {
     `;
   }
 
-  _stateContinueOnPhone() {
+  _stateShowingQRCodeInstead() {
+    return `
+      <!-- State: ShowingQRCode -->
+      <canvas id="irma-web-qr-canvas"></canvas>
+      <p><a data-irma-glue-transition="restart">${this._options.translations.back}</a></p>
+    `;
+  }
+
+  _stateContinueInApp() {
     return `
       <!-- State: WaitingForUser -->
       <div class="irma-web-waiting-for-user-animation"></div>
-      <p>${this._options.translations.phone}</p>
+      <p>${this._options.translations.app}</p>
+      <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
     `;
   }
 

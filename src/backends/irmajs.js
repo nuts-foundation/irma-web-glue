@@ -16,6 +16,7 @@ export default class IrmaJSBackend {
         this._startNewSession();
         break;
       case 'ShowingQRCode':
+      case 'ShowingQRCodeInstead':
         this._renderQRCode();
         break;
       case 'ContinueInApp':
@@ -75,7 +76,7 @@ export default class IrmaJSBackend {
     let irmaState = {};
     irma.setupSession(this._options.sessionPtr, irmaState, Object.assign(this._options, options))
         .then((p) => {
-          this._stateMachine.transition('codeScanned');
+          if (options.method == 'canvas') this._stateMachine.transition('codeScanned');
           irma.finishSession(p, irmaState)
               .then( (r) => this._handleDone(r))
               .catch((s) => this._handleError(s));

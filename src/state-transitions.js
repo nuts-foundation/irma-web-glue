@@ -28,19 +28,26 @@ export default {
   ContinueOnPhone: {
     succeed:        'Success',
     cancel:         'Cancelled',
-    restart:        'Uninitialized',
+    restart:        'Loading',
     fail:           'Error'
   },
 
   ShowingIrmaButton: {
-    chooseQR:       'ShowingQRCode',
+    chooseQR:       'ShowingQRCodeInstead',
     openIrmaApp:    'ContinueInApp',
     fail:           'Error'
   },
 
+  ShowingQRCodeInstead: {
+    codeScanned:    'ContinueOnPhone',
+    fail:           'Error',
+    restart:        'Loading'
+  },
+
   ContinueInApp: {
     succeed:        'Success',
-    chooseQR:       'ShowingQRCode',
+    cancel:         'Cancelled',
+    restart:        'Loading',
     fail:           'Error'
   },
 
