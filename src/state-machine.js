@@ -5,7 +5,7 @@ const enableDebugging = true;
 
 export default class StateMachine {
 
-  constructor(callback) {
+  constructor() {
     this._callbacks = [];
     this._state     = 'Uninitialized';
   }

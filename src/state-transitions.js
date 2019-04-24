@@ -22,6 +22,7 @@ export default {
 
   ShowingQRCode: {
     codeScanned:    'ContinueOnPhone',
+    timeout:        'TimedOut',
     fail:           'Error'
   },
 
@@ -29,6 +30,7 @@ export default {
     succeed:        'Success',
     cancel:         'Cancelled',
     restart:        'Loading',
+    timeout:        'TimedOut',
     fail:           'Error'
   },
 
@@ -40,14 +42,16 @@ export default {
 
   ShowingQRCodeInstead: {
     codeScanned:    'ContinueOnPhone',
-    fail:           'Error',
-    restart:        'Loading'
+    restart:        'Loading',
+    timeout:        'TimedOut',
+    fail:           'Error'
   },
 
   ContinueInApp: {
     succeed:        'Success',
     cancel:         'Cancelled',
     restart:        'Loading',
+    timeout:        'TimedOut',
     fail:           'Error'
   },
 

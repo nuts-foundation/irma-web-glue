@@ -36,11 +36,8 @@ export default class IrmaJSBackend {
 
   _startNewSession() {
     irma.startSession(this._options.server, this._options.request)
-        .then(({ sessionPtr, token }) => this._handleSession(sessionPtr, token))
-        .catch((m) => {
-          console.error("Irma startSession failed:", m);
-          stateMachine.transition('fail')
-        });
+        .then(({sessionPtr, token}) => this._handleSession(sessionPtr, token))
+        .catch((s) => this._handleError(s));
   }
 
   _handleSession(sessionPtr, token) {
@@ -81,10 +78,7 @@ export default class IrmaJSBackend {
               .then( (r) => this._handleDone(r))
               .catch((s) => this._handleError(s));
         })
-        .catch((m) => {
-          console.error("Irma setupSession failed:", m);
-          stateMachine.transition('fail')
-        })
+        .catch((s) => this._handleError(s));
   }
 
   _handleDone(result) {
@@ -95,11 +89,17 @@ export default class IrmaJSBackend {
   _handleError(state) {
     switch(state) {
       case 'CANCELLED':
-        // This is a conscious choice by a user
+        // This is a conscious choice by a user.
         this._stateMachine.transition('cancel');
         break;
+      case 'TIMEOUT':
+        // This is a known and understood error. We can be explicit to the user.
+        this._stateMachine.transition('timeout');
+        break;
       default:
-        console.error("Irma finishSession failed:", state);
+        // Catch unknown errors and give generic error message. We never really
+        // want to get here.
+        console.error("IRMA session failed:", state);
         this._stateMachine.transition('fail');
         break;
     }
