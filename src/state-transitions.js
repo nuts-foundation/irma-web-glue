@@ -21,12 +21,12 @@ export default {
   },
 
   ShowingQRCode: {
-    codeScanned:    'ContinueOnPhone',
+    codeScanned:    'ContinueOn2ndDevice',
     timeout:        'TimedOut',
     fail:           'Error'
   },
 
-  ContinueOnPhone: {
+  ContinueOn2ndDevice: {
     succeed:        'Success',
     cancel:         'Cancelled',
     restart:        'Loading',
@@ -36,18 +36,18 @@ export default {
 
   ShowingIrmaButton: {
     chooseQR:       'ShowingQRCodeInstead',
-    openIrmaApp:    'ContinueInApp',
+    openIrmaApp:    'ContinueInIrmaApp',
     fail:           'Error'
   },
 
   ShowingQRCodeInstead: {
-    codeScanned:    'ContinueOnPhone',
+    codeScanned:    'ContinueOn2ndDevice',
     restart:        'Loading',
     timeout:        'TimedOut',
     fail:           'Error'
   },
 
-  ContinueInApp: {
+  ContinueInIrmaApp: {
     succeed:        'Success',
     cancel:         'Cancelled',
     restart:        'Loading',

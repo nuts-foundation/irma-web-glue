@@ -20,13 +20,12 @@ export default class IrmaWebFrontend {
         loading:   'Eén moment alsjeblieft',
         button:    'Open IRMA app',
         qrCode:    'Toon QR code',
-        phone:     'Volg de instructies op je telefoon',
         app:       'Volg de instructies in de IRMA app',
         retry:     'Opnieuw proberen',
         back:      'Ga terug',
-        cancelled: 'Je hebt het proces geannuleerd',
-        timeout:   'We hebben te lang niks van je gehoord',
-        error:     'Er is een fout opgetreden',
+        cancelled: 'Je hebt ervoor gekozen te weigeren in de IRMA app. Het spijt ons, maar dan kunnen we je niet inloggen',
+        timeout:   'Sorry, we hebben te lang niks van je gehoord',
+        error:     'Sorry! Er is een fout opgetreden',
         browser:   'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
         success:   'Gelukt!'
       }
@@ -56,7 +55,7 @@ export default class IrmaWebFrontend {
     let newPartial = this._stateToPartialMapping()[state];
     if (!newPartial) throw new Error(`I don't know how to render '${state}'`);
 
-    if (state == 'ContinueInApp') {
+    if (state == 'ContinueInIrmaApp') {
       // Add a tiny delay so we don't see the flicker when switching to the app
       window.setTimeout(() => this._renderPartial(newPartial), 200);
     } else {
@@ -75,10 +74,10 @@ export default class IrmaWebFrontend {
       Uninitialized:        this._stateUninitialized,
       Loading:              this._stateLoading,
       ShowingQRCode:        this._stateShowingQRCode,
-      ContinueOnPhone:      this._stateContinueOnPhone,
+      ContinueOn2ndDevice:  this._stateContinueInIrmaApp,
       ShowingIrmaButton:    this._stateShowingIrmaButton,
       ShowingQRCodeInstead: this._stateShowingQRCodeInstead,
-      ContinueInApp:        this._stateContinueInApp,
+      ContinueInIrmaApp:    this._stateContinueInIrmaApp,
       Cancelled:            this._stateCancelled,
       TimedOut:             this._stateTimedOut,
       Error:                this._stateError,
@@ -134,15 +133,6 @@ export default class IrmaWebFrontend {
     `;
   }
 
-  _stateContinueOnPhone() {
-    return `
-      <!-- State: WaitingForUser -->
-      <div class="irma-web-waiting-for-user-animation"></div>
-      <p>${this._options.translations.phone}</p>
-      <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
-    `;
-  }
-
   _stateShowingIrmaButton() {
     return `
       <!-- State: ShowingButton -->
@@ -159,7 +149,7 @@ export default class IrmaWebFrontend {
     `;
   }
 
-  _stateContinueInApp() {
+  _stateContinueInIrmaApp() {
     return `
       <!-- State: WaitingForUser -->
       <div class="irma-web-waiting-for-user-animation"></div>

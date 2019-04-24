@@ -19,7 +19,7 @@ export default class IrmaJSBackend {
       case 'ShowingQRCodeInstead':
         this._renderQRCode();
         break;
-      case 'ContinueInApp':
+      case 'ContinueInIrmaApp':
         this._openIrmaApp();
         break;
     }
