@@ -82,7 +82,7 @@ module.exports = [
 		},
 
 		devServer: {
-			contentBase: [path.join(__dirname, 'example'), path.join(__dirname, 'dist'), path.join(__dirname, 'node_modules/irma-web-frontend/dist')],
+			contentBase: [path.join(__dirname, 'docs'), path.join(__dirname, 'dist')],
 			disableHostCheck: true
 		}
 	},
@@ -91,6 +91,7 @@ module.exports = [
 		entry: {
 	    "irma-web-glue": "./src/index.js",
 	    "irma-web-glue.min": "./src/index.js",
+	    "../docs/irma-web-glue.min": "./src/index.js"
 	  },
 
 		module: sharedModule,

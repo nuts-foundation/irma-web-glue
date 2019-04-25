@@ -6,14 +6,19 @@
     <title>IRMA web glue example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script src="irma-web-glue.min.js" type="text/javascript"></script>
     <script src="irma-web-glue-development.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="irma-web-frontend.css" />
+    <link rel="stylesheet" href="irma-web-frontend/irma-web-frontend.min.css" />
 
     <script type="text/javascript">
       window.addEventListener('load', function() {
 
         // The usual configuration for irmajs
-        const server = "http://localhost:8088";
+        let server = localStorage.getItem('irma-api-server');
+        if (!server) {
+          server = prompt('Please provide the URL to an IRMA api server', 'http://localhost:8088');
+          localStorage.setItem('irma-api-server', server);
+        }
         const request = {
           type: 'disclosing',
           content: [{
@@ -40,6 +45,16 @@
         width: 100%;
         height: 100%;
       }
+
+      .change-url {
+        position: absolute;
+        width: 200px;
+        bottom: 10px;
+        left: 50%;
+        margin-left: -100px;
+        text-align: center;
+        font: 12px Tahoma;
+      }
     </style>
   </head>
 
@@ -58,6 +73,8 @@
         </section>
       </section>
     </section>
+
+    <a class="change-url" href="javascript:localStorage.clear(); window.history.go(0);">Change API server URL</a>
   </body>
 
 </html>

@@ -4,7 +4,7 @@
   "description": "Glue irma-web-frontend to irmajs",
   "main": "dist/irma-web-glue.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack && cp -r node_modules/irma-web-frontend/dist/* docs/irma-web-frontend/",
     "serve": "webpack-dev-server"
   },
   "repository": {
