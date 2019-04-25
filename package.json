@@ -2,7 +2,7 @@
   "name": "irma-web-glue",
   "version": "0.1.0",
   "description": "Glue irma-web-frontend to irmajs",
-  "main": "src/irma-web-glue.js",
+  "main": "dist/irma-web-glue.js",
   "scripts": {
     "build": "webpack",
     "serve": "webpack-dev-server"
@@ -24,9 +24,8 @@
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.1",
-    "irma-web-frontend": "^0.1.1"
-  },
-  "dependencies": {
+    "irma-web-frontend": "^0.1.1",
     "@privacybydesign/irmajs": "github:nuts-foundation/irmajs"
-  }
+  },
+  "dependencies": {}
 }
