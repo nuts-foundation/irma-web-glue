@@ -21,10 +21,18 @@
           navigator.serviceWorker.register('service-worker.js');
         }
 
+        // Fetch and show version number to detect caching issues
+        fetch("version.json")
+          .then(function(response) { return response.json(); })
+          .then(function(data) {
+            document.querySelector('.version').innerText = "Version " + data.version;
+          });
+
         // Ask the user for an IRMA API server and store for later use
         let server = localStorage.getItem('irma-api-server');
         if (!server) {
-          server = prompt('Please provide the URL to an IRMA API server', 'http://localhost:8088');
+          let url = window.location.hostname == 'localhost' ? 'http://localhost:8088' : 'https://metrics.privacybydesign.foundation/irmaserver';
+          server = prompt('Please provide the URL to an IRMA API server', url);
           localStorage.setItem('irma-api-server', server);
         }
 
@@ -57,14 +65,16 @@
         height: 100%;
       }
 
-      .change-url {
+      .change-url, .version {
         position: absolute;
-        width: 200px;
+        left: 0;
+        right: 0;
         bottom: 10px;
-        left: 50%;
-        margin-left: -100px;
         text-align: center;
         font: 12px Tahoma;
+      }
+      .change-url {
+        bottom: 25px;
       }
     </style>
   </head>
@@ -86,6 +96,7 @@
     </section>
 
     <a class="change-url" href="javascript:localStorage.clear(); window.history.go(0);">Change IRMA API server URL</a>
+    <span class="version">Version unknown</span>
   </body>
 
 </html>
