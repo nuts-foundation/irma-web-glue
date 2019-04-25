@@ -74,10 +74,9 @@ export default class IrmaJSBackend {
     irma.setupSession(this._options.sessionPtr, irmaState, Object.assign(this._options, options))
         .then((p) => {
           if (options.method == 'canvas') this._stateMachine.transition('codeScanned');
-          irma.finishSession(p, irmaState)
-              .then( (r) => this._handleDone(r))
-              .catch((s) => this._handleError(s));
+          return irma.finishSession(p, irmaState);
         })
+        .then( (r) => this._handleDone(r))
         .catch((s) => this._handleError(s));
   }
 
