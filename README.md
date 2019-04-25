@@ -12,12 +12,19 @@ flow look and act like [`irma-web-frontend`](https://github.com/nuts-foundation/
 This package has been designed and tested to work with the browsers Chrome,
 Firefox, Safari, Opera, Edge and IE11.
 
+If you have an [IRMA server](https://irma.app/docs/irma-server/) running over
+HTTPS you can try out this [live demo](https://nuts-foundation.github.io/irma-web-glue/).
+
 ## Current state
 
-This package currently depends on our own fork of `irmajs`. This is until we get
-a [PR approved and merged](https://github.com/privacybydesign/irmajs/pull/1) by
-Privacy By Design. So if this is an issue for you, please check back in a couple
-of weeks 😄
+`irma-web-glue` should be fully functional on desktop and Android. There's
+[an issue](https://github.com/nuts-foundation/irma-web-glue/issues/2) (probably
+[in `irmajs`](https://github.com/privacybydesign/irmajs/issues/2)) that makes
+disclosure flows fail more often than succeed on iOS. Depending on your use-case
+this may or may not be a reason to wait a few weeks before adopting this package.
+
+This package currently uses our own fork of `irmajs`. This is until a new
+version of `irmajs` is released containing [our changes](https://github.com/privacybydesign/irmajs/pull/1).
 
 ## Design considerations
 
@@ -42,7 +49,7 @@ There is a normal version and a minified version of the Javascripts [available
 for download on Github](https://github.com/nuts-foundation/irma-web-glue/tree/master/dist)
 that you can include in your own project.
 
-If you include the `irma-web-glue.js` file in your HTML, you will have
+If you include the `irma-web-glue[.min].js` file in your HTML, you will have
 `IrmaWebGlue` available as a class (on `window`).
 
 #### The way the cool kids do it
@@ -53,17 +60,17 @@ package it in some complicated way (frameworks, for example) or if you want to
 stay up to date.
 
 ```bash
-$ npm install nuts-foundation/irma-web-glue
+$ npm install irma-web-glue
 ```
 
-`irmajs` is a dependency of this package, so you don't need to add that as an
-extra dependency. If you want you can remove any existing dependencies on it
-from your own project.
+`irmajs` is built in to this package, so you don't need to add that as an extra
+dependency. If you want you can remove any existing dependencies on it your own
+project.
 
 You can then import the `IrmaWebGlue` class like so:
 
 ```javascript
-import IrmaWebGlue from "nuts-foundation/irma-web-glue";
+import IrmaWebGlue from "irma-web-glue";
 ```
 
 ### Usage
@@ -121,7 +128,7 @@ already been pre-filled with the right markup. For `irma-web-frontend` this is:
 
 ### Customizing
 
-You can override some behaviour, any `irmajs` options and all the strings used
+You can override some behaviour, most `irmajs` options and all the strings used
 in the front-end (for example to implement translations). See
 `src/irma-web-glue.js`, `src/frontends/irma-web.js` and `src/backends/irmajs.js`
 for all options. An example:
@@ -163,8 +170,7 @@ $ npm run serve
 You should now have the example running on
 [http://localhost:8080](http://localhost:8080).
 
-This example is dependent on having a working [IRMA server](https://irma.app/docs/irma-server/)
-running on port 8088.
+For this example you need a working [IRMA server](https://irma.app/docs/irma-server/).
 
 Any change you make to the javascript will trigger a rebuild of the project
 and automatically refresh in the browser.
