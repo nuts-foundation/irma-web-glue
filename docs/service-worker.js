@@ -5,11 +5,11 @@ self.addEventListener('install', function(event) {
     caches.open(CACHE_NAME)
       .then(function(cache) {
         return cache.addAll([
-          '/index.html',
-          '/irma-web-glue.min.js',
-          '/irma-web-frontend/irma-web-frontend.min.css',
-          '/irma-web-frontend/fonts/Roboto/Roboto-Light.ttf',
-          '/irma-web-frontend/fonts/Roboto/Roboto-LightItalic.ttf'
+          'index.html',
+          'irma-web-glue.min.js',
+          'irma-web-frontend/irma-web-frontend.min.css',
+          'irma-web-frontend/fonts/Roboto/Roboto-Light.ttf',
+          'irma-web-frontend/fonts/Roboto/Roboto-LightItalic.ttf'
         ]);
       })
   );
