@@ -8,17 +8,27 @@
 
     <script src="irma-web-glue.min.js" type="text/javascript"></script>
     <script src="irma-web-glue-development.js" type="text/javascript"></script>
+
     <link rel="stylesheet" href="irma-web-frontend/irma-web-frontend.min.css" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
 
     <script type="text/javascript">
       window.addEventListener('load', function() {
 
-        // The usual configuration for irmajs
+        // Register service worker so we can install this example as a PWA
+        if('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('service-worker.js');
+        }
+
+        // Ask the user for an IRMA API server and store for later use
         let server = localStorage.getItem('irma-api-server');
         if (!server) {
-          server = prompt('Please provide the URL to an IRMA api server', 'http://localhost:8088');
+          server = prompt('Please provide the URL to an IRMA API server', 'http://localhost:8088');
           localStorage.setItem('irma-api-server', server);
         }
+
+        // This is the disclosure request that we wish to do
         const request = {
           type: 'disclosing',
           content: [{
@@ -31,6 +41,7 @@
         let irmaForm = document.getElementById('irma-web-form');
         let glue     = new IrmaWebGlue(irmaForm);
 
+        // Start the IRMA flow!
         glue.startFlow(server, request)
             .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })
             .catch(function(state) { alert("Disclosure failed in state '" + state + "' 🤨") });
@@ -74,7 +85,7 @@
       </section>
     </section>
 
-    <a class="change-url" href="javascript:localStorage.clear(); window.history.go(0);">Change API server URL</a>
+    <a class="change-url" href="javascript:localStorage.clear(); window.history.go(0);">Change IRMA API server URL</a>
   </body>
 
 </html>
