@@ -196,6 +196,9 @@
   height: auto;
   text-align: center;
 }
+.irma-web-form .content .centered img, .irma-web-form .content .centered canvas {
+  cursor: none;
+}
 .irma-web-form .content p {
   box-sizing: border-box;
   margin: 0px;
