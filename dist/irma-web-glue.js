@@ -38561,29 +38561,33 @@ __webpack_require__.r(__webpack_exports__);
     fail: 'Error'
   },
   ShowingQRCode: {
-    codeScanned: 'ContinueOnPhone',
+    codeScanned: 'ContinueOn2ndDevice',
+    timeout: 'TimedOut',
     fail: 'Error'
   },
-  ContinueOnPhone: {
+  ContinueOn2ndDevice: {
     succeed: 'Success',
     cancel: 'Cancelled',
     restart: 'Loading',
+    timeout: 'TimedOut',
     fail: 'Error'
   },
   ShowingIrmaButton: {
     chooseQR: 'ShowingQRCodeInstead',
-    openIrmaApp: 'ContinueInApp',
+    openIrmaApp: 'ContinueInIrmaApp',
     fail: 'Error'
   },
   ShowingQRCodeInstead: {
-    codeScanned: 'ContinueOnPhone',
-    fail: 'Error',
-    restart: 'Loading'
+    codeScanned: 'ContinueOn2ndDevice',
+    restart: 'Loading',
+    timeout: 'TimedOut',
+    fail: 'Error'
   },
-  ContinueInApp: {
+  ContinueInIrmaApp: {
     succeed: 'Success',
     cancel: 'Cancelled',
     restart: 'Loading',
+    timeout: 'TimedOut',
     fail: 'Error'
   },
   Cancelled: {
@@ -38612,7 +38616,7 @@ var enableDebugging = true;
 var state_machine_StateMachine =
 /*#__PURE__*/
 function () {
-  function StateMachine(callback) {
+  function StateMachine() {
     _classCallCheck(this, StateMachine);
 
     this._callbacks = [];
@@ -38703,13 +38707,12 @@ function () {
           loading: 'Eén moment alsjeblieft',
           button: 'Open IRMA app',
           qrCode: 'Toon QR code',
-          phone: 'Volg de instructies op je telefoon',
           app: 'Volg de instructies in de IRMA app',
           retry: 'Opnieuw proberen',
           back: 'Ga terug',
-          cancelled: 'Je hebt het proces geannuleerd',
-          timeout: 'We hebben te lang niks van je gehoord',
-          error: 'Er is een fout opgetreden',
+          cancelled: 'Je hebt ervoor gekozen te weigeren in de IRMA app. Het spijt ons, maar dan kunnen we je niet inloggen',
+          timeout: 'Sorry, we hebben te lang niks van je gehoord',
+          error: 'Sorry! Er is een fout opgetreden',
           browser: 'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
           success: 'Gelukt!'
         }
@@ -38747,7 +38750,7 @@ function () {
 
       if (!newPartial) throw new Error("I don't know how to render '".concat(state, "'"));
 
-      if (state == 'ContinueInApp') {
+      if (state == 'ContinueInIrmaApp') {
         // Add a tiny delay so we don't see the flicker when switching to the app
         window.setTimeout(function () {
           return _this3._renderPartial(newPartial);
@@ -38768,10 +38771,10 @@ function () {
         Uninitialized: this._stateUninitialized,
         Loading: this._stateLoading,
         ShowingQRCode: this._stateShowingQRCode,
-        ContinueOnPhone: this._stateContinueOnPhone,
+        ContinueOn2ndDevice: this._stateContinueInIrmaApp,
         ShowingIrmaButton: this._stateShowingIrmaButton,
         ShowingQRCodeInstead: this._stateShowingQRCodeInstead,
-        ContinueInApp: this._stateContinueInApp,
+        ContinueInIrmaApp: this._stateContinueInIrmaApp,
         Cancelled: this._stateCancelled,
         TimedOut: this._stateTimedOut,
         Error: this._stateError,
@@ -38804,11 +38807,6 @@ function () {
       return "\n      <!-- State: ShowingQRCode -->\n      <canvas id=\"irma-web-qr-canvas\"></canvas>\n    ";
     }
   }, {
-    key: "_stateContinueOnPhone",
-    value: function _stateContinueOnPhone() {
-      return "\n      <!-- State: WaitingForUser -->\n      <div class=\"irma-web-waiting-for-user-animation\"></div>\n      <p>".concat(this._options.translations.phone, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
-    }
-  }, {
     key: "_stateShowingIrmaButton",
     value: function _stateShowingIrmaButton() {
       return "\n      <!-- State: ShowingButton -->\n      <button class=\"irma-web-button\" data-irma-glue-transition=\"openIrmaApp\">".concat(this._options.translations.button, "</button>\n      <p><a data-irma-glue-transition=\"chooseQR\">").concat(this._options.translations.qrCode, "</a></p>\n    ");
@@ -38819,8 +38817,8 @@ function () {
       return "\n      <!-- State: ShowingQRCode -->\n      <canvas id=\"irma-web-qr-canvas\"></canvas>\n      <p><a data-irma-glue-transition=\"restart\">".concat(this._options.translations.back, "</a></p>\n    ");
     }
   }, {
-    key: "_stateContinueInApp",
-    value: function _stateContinueInApp() {
+    key: "_stateContinueInIrmaApp",
+    value: function _stateContinueInIrmaApp() {
       return "\n      <!-- State: WaitingForUser -->\n      <div class=\"irma-web-waiting-for-user-animation\"></div>\n      <p>".concat(this._options.translations.app, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
     }
   }, {
@@ -38901,7 +38899,7 @@ function () {
 
           break;
 
-        case 'ContinueInApp':
+        case 'ContinueInIrmaApp':
           this._openIrmaApp();
 
           break;
@@ -38926,9 +38924,8 @@ function () {
         var sessionPtr = _ref.sessionPtr,
             token = _ref.token;
         return _this2._handleSession(sessionPtr, token);
-      })["catch"](function (m) {
-        console.error("Irma startSession failed:", m);
-        stateMachine.transition('fail');
+      })["catch"](function (s) {
+        return _this2._handleError(s);
       });
     }
   }, {
@@ -38970,14 +38967,11 @@ function () {
       var irmaState = {};
       irma_node_default.a.setupSession(this._options.sessionPtr, irmaState, Object.assign(this._options, options)).then(function (p) {
         if (options.method == 'canvas') _this3._stateMachine.transition('codeScanned');
-        irma_node_default.a.finishSession(p, irmaState).then(function (r) {
-          return _this3._handleDone(r);
-        })["catch"](function (s) {
-          return _this3._handleError(s);
-        });
-      })["catch"](function (m) {
-        console.error("Irma setupSession failed:", m);
-        stateMachine.transition('fail');
+        return irma_node_default.a.finishSession(p, irmaState);
+      }).then(function (r) {
+        return _this3._handleDone(r);
+      })["catch"](function (s) {
+        return _this3._handleError(s);
       });
     }
   }, {
@@ -38992,13 +38986,31 @@ function () {
     value: function _handleError(state) {
       switch (state) {
         case 'CANCELLED':
-          // This is a conscious choice by a user
+          // This is a conscious choice by a user.
           this._stateMachine.transition('cancel');
 
           break;
 
+        case 'TIMEOUT':
+          // This is a known and understood error. We can be explicit to the user.
+          this._stateMachine.transition('timeout');
+
+          break;
+
+        case 'DONE':
+          // Triggered on iOS. Flow was actually succesful, but the connection was
+          // lost. Looks like the inner promise rejects because of the connection
+          // and then the outer promise rejects in state DONE.
+          // TODO: Figure out how to get the result and keep the first reject from
+          // moving the state machine to the Error state.
+          this._stateMachine.transition('succeed');
+
+          break;
+
         default:
-          console.error("Irma finishSession failed:", state);
+          // Catch unknown errors and give generic error message. We never really
+          // want to get here.
+          console.error("IRMA session failed:", state);
 
           this._stateMachine.transition('fail');
 
