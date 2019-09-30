@@ -23,9 +23,6 @@ HTTPS you can try out this [live demo](https://nuts-foundation.github.io/irma-we
 disclosure flows fail more often than succeed on iOS. Depending on your use-case
 this may or may not be a reason to wait a few weeks before adopting this package.
 
-This package currently uses our own fork of `irmajs`. This is until a new
-version of `irmajs` is released containing [our changes](https://github.com/privacybydesign/irmajs/pull/1).
-
 ## Design considerations
 
 We want to make embedding an IRMA disclosure flow in your website as simple as
