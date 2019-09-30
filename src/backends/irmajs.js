@@ -1,4 +1,4 @@
-import irma from '@privacybydesign/irmajs';
+const irma = require('@privacybydesign/irmajs');
 
 export default class IrmaJSBackend {
 
