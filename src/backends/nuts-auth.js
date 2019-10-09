@@ -40,11 +40,11 @@ export default class NutsAuthBackend {
 
   _startNewSession() {
     fetch(`${this._options.server}/auth/contract/session`, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(this._options.request),
-      cache: 'reload'
+      method:  'POST',
+      mode:    'cors',
+      headers: {'Content-Type': 'application/json'},
+      body:    JSON.stringify(this._options.request),
+      cache:   'reload'
     })
     .then(result => {
       if (result.status != 201)
@@ -79,7 +79,7 @@ export default class NutsAuthBackend {
   _waitForSigning() {
     this._waitFor('DONE')
     .then(state => {
-      if ( state.proofStatus != "VALID" ) {
+      if ( state.proofStatus != 'VALID' ) {
         this._stateMachine.transition('fail');
       }
 
@@ -93,10 +93,10 @@ export default class NutsAuthBackend {
     return new Promise((resolve, reject) => {
       const interval = setInterval(() => {
         fetch(`${this._options.server}/auth/contract/session/${this._options.session.session_id}`, {
-          method: 'GET',
-          mode: 'cors',
-          headers: {"Content-Type": "application/json"},
-          cache: 'reload'
+          method:  'GET',
+          mode:    'cors',
+          headers: {'Content-Type': 'application/json'},
+          cache:   'reload'
         })
         .then(result => {
           if ( result.status != 200 )
