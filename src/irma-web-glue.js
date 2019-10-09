@@ -10,7 +10,7 @@ export default class IrmaWebGlue {
     this._stateMachine = new StateMachine();
     this._stateMachine.addStateChangeListener((s) => this._stateChangeListener(s));
 
-    this._frontend     = new options.frontend(this._stateMachine, element, options.frontEndOptions);
+    this._frontend     = new options.frontend(this._stateMachine, element, options.frontendOptions);
     this._backend      = new options.backend(this._stateMachine, (r) => this._flowResult = r, options.backendOptions);
   }
 
@@ -18,7 +18,7 @@ export default class IrmaWebGlue {
     return Object.assign({
       frontend: frontends.IrmaWeb,
       backend:  backends.IrmaJS,
-      frontEndOptions: {},
+      frontendOptions: {},
       backendOptions:  {}
     }, options);
   }
