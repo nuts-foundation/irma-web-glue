@@ -45,3 +45,6 @@ export default class IrmaWebGlue {
   }
 
 }
+
+IrmaWebGlue.frontends = frontends;
+IrmaWebGlue.backends  = backends;
