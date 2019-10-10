@@ -1,9 +1,5 @@
 import QRCode from 'qrcode';
 
-// Polyfill `fetch` for IE11
-require('es6-promise').polyfill();
-require('isomorphic-fetch');
-
 export default class NutsAuthBackend {
 
   constructor(stateMachine, resultCallback, options) {
@@ -108,7 +104,8 @@ export default class NutsAuthBackend {
             clearInterval(interval);
             resolve(state);
           }
-          if ( ['TIMEOUT', 'ERROR', 'CANCELLED'].includes(state.status) ) {
+          // IE11 doesn't support "includes", so do it this way:
+          if ( ['TIMEOUT', 'ERROR', 'CANCELLED'].indexOf(state.status) >= 0 ) {
             clearInterval(interval);
             reject(state);
           }
