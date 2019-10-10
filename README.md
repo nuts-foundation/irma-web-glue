@@ -9,25 +9,19 @@ This package is designed as a semi-drop-in-replacement for the [`irmajs`](https:
 package. If you replace `irmajs` with this package it will make the whole IRMA
 flow look and act like [`irma-web-frontend`](https://github.com/nuts-foundation/irma-web-frontend).
 
-This package has been designed and tested to work with the browsers Chrome,
-Firefox, Safari, Opera, Edge and IE11.
-
-If you have an [IRMA server](https://irma.app/docs/irma-server/) running over
-HTTPS you can try out this [live demo](https://nuts-foundation.github.io/irma-web-glue/).
+You can try out this [live demo](https://nuts-foundation.github.io/irma-web-glue/)
+that asks if you are over 18.
 
 ## Current state
 
-`irma-web-glue` should be fully functional on desktop and Android. There's
-[an issue](https://github.com/nuts-foundation/irma-web-glue/issues/2) (probably
-[in `irmajs`](https://github.com/privacybydesign/irmajs/issues/2)) that makes
-disclosure flows fail more often than succeed on iOS. Depending on your use-case
-this may or may not be a reason to wait a few weeks before adopting this package.
+`irma-web-glue` should be fully functional on desktop (Chrome, Firefox, Safari,
+Opera, Edge and IE11 have been tested), Android and iOS.
 
 ## Design considerations
 
 We want to make embedding an IRMA disclosure flow in your website as simple as
-we can. Because of this we have chosen a similar though slightly simpler API
-than the `irmajs` API. `irma-web-glue` intends to be your one stop shop to
+we can. Because of this we have chosen a similar (though slightly simpler) API
+to the `irmajs` API. `irma-web-glue` intends to be your one stop shop to
 import in your project and launch into good-looking IRMA flows in the web
 browser with zero hassle. If you feel that we can do better in this regard,
 please [let us know](https://github.com/nuts-foundation/irma-web-glue/issues) 😉.
@@ -72,8 +66,9 @@ import IrmaWebGlue from "irma-web-glue";
 
 ### Usage
 
-See `example/index.html` for a complete example. This section explains how the
-different parts go together.
+See [`docs/index.html`](https://github.com/nuts-foundation/irma-web-glue/blob/master/docs/index.html)
+for a complete example. This section explains how the different parts go
+together.
 
 Just like `irmajs` we need an IRMA server and a request:
 
@@ -89,22 +84,29 @@ const request = {
 };
 ```
 
-But instead of feeding these directly to `irmajs` you hand them to a new
-instance of the `IrmaWebGlue` class:
+We instantiate the `IrmaWebGlue` class, supplying a DOM element to render to:
 
 ```javascript
-// Initialize irma-web-glue
-let irmaForm = document.getElementById('irma-web-form');
-let glue     = new IrmaWebGlue(irmaForm);
-
-glue.startFlow(server, request)
-    .then(function(result) { alert("Successful disclosure! 🎉"); console.log(result); })
-    .catch(function(state) { alert("Disclosure failed in state '" + state + "' 🤨") });
+const irmaForm = document.getElementById('irma-web-form');
+const glue     = new IrmaWebGlue(irmaForm);
 ```
 
-`irma-web-form` in this case is the ID of an element that `irma-web-glue` will
-render the interface in to. To prevent flickering, it helps if this element has
-already been pre-filled with the right markup. For `irma-web-frontend` this is:
+Finally, we call `startFlow` on this object with the server and the request that
+we wish to have fulfilled. This returns a Promise:
+
+```javascript
+glue.startFlow(server, request)
+    .then((result) => {
+      alert("Successful disclosure! 🎉");
+      console.log(result);
+    })
+    .catch((state) => {
+      alert("Disclosure failed in state '" + state + "' 🤨")
+    });
+```
+
+To prevent flickering, it helps if the rendered-to element has already been
+pre-loaded with the right markup. For `irma-web-frontend` this is:
 
 ```html
 <section class="irma-web-form" id="irma-web-form">
@@ -122,6 +124,39 @@ already been pre-filled with the right markup. For `irma-web-frontend` this is:
   </section>
 </section>
 ```
+
+### Using NutsAuth as back-end
+
+If you wish to use this package for authenticating a user against a
+[Nuts node](https://nuts-documentation.readthedocs.io/en/latest/pages/technical/login-contract.html),
+the moving parts are exactly the same as above, but you have to tell
+`IrmaWebGlue` to use the `NutsAuth` back-end:
+
+```javascript
+const glue = new IrmaWebGlue(irmaForm, {
+  backend: IrmaWebGlue.backends.NutsAuth
+});
+```
+
+Then, you supply a Nuts node URL and a Nuts contract instead of an IRMA request:
+
+```javascript
+// Point to a Nuts endpoint
+const server = 'http://localhost:21323';
+
+// Request in Nuts-form
+const request = {
+  type: "BehandelaarLogin",
+  language: "NL",
+  version: "v1"
+};
+```
+
+And you feed that to the `startFlow` method of your `IrmaWebGlue` instance as
+explained above.
+
+Please note that `NutsAuth` doesn't support mobile flows (yet) and will always
+show a QR code to scan, even on mobile.
 
 ### Customizing
 
