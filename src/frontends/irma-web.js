@@ -16,15 +16,15 @@ export default class IrmaWebFrontend {
       showHelper: false,
       translations: {
         header:    'Inloggen met <i class="irma-web-logo">IRMA</i>',
-        helper:    'Kom je er niet uit? Kijk dan eerst eens op <a href="https://privacybydesign.foundation/irma-begin/">de website van IRMA</a>.',
+        helper:    'Kom je er niet uit? Kijk dan eerst eens op <a href="https://irma.app/">de website van IRMA</a>.',
         loading:   'Eén moment alsjeblieft',
         button:    'Open IRMA app',
         qrCode:    'Toon QR code',
         app:       'Volg de instructies in de IRMA app',
         retry:     'Opnieuw proberen',
         back:      'Ga terug',
-        cancelled: 'Je hebt ervoor gekozen te weigeren in de IRMA app. Het spijt ons, maar dan kunnen we je niet inloggen',
-        timeout:   'Sorry, we hebben te lang niks van je gehoord',
+        cancelled: 'We hebben de attributen niet ontvangen. Het spijt ons, maar dan kunnen we je niet inloggen',
+        timeout:   'Sorry! We hebben te lang<br/>niks van je gehoord',
         error:     'Sorry! Er is een fout opgetreden',
         browser:   'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
         success:   'Gelukt!'
@@ -161,6 +161,7 @@ export default class IrmaWebFrontend {
   _stateCancelled() {
     return `
       <!-- State: Cancelled -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._options.translations.cancelled}</p>
       <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
     `;
@@ -169,6 +170,7 @@ export default class IrmaWebFrontend {
   _stateTimedOut() {
     return `
       <!-- State: TimedOut -->
+      <div class="irma-web-clock-animation"></div>
       <p>${this._options.translations.timeout}</p>
       <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
     `;
@@ -177,6 +179,7 @@ export default class IrmaWebFrontend {
   _stateError() {
     return `
       <!-- State: Error -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._options.translations.error}</p>
       <p><a data-irma-glue-transition="restart">${this._options.translations.retry}</a></p>
     `;
@@ -184,7 +187,8 @@ export default class IrmaWebFrontend {
 
   _stateBrowserNotSupported() {
     return `
-      <!-- State: Error -->
+      <!-- State: BrowserNotSupported -->
+      <div class="irma-web-forbidden-animation"></div>
       <p>${this._options.translations.browser}</p>
     `;
   }
