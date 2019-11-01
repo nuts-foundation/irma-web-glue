@@ -4,10 +4,9 @@
   "description": "Glue irma-web-frontend to irmajs",
   "main": "dist/irma-web-glue.js",
   "scripts": {
-    "build": "webpack && npm run copy-styling && npm run update-example-version",
+    "build": "webpack && npm run update-example-version",
     "serve": "webpack-dev-server",
-    "update-example-version": "echo \"{ \\\"version\\\": \\\"`git rev-parse HEAD`\\\" }\" > docs/version.json",
-    "copy-styling": "cp -r node_modules/irma-web-frontend/dist/* docs/irma-web-frontend/"
+    "update-example-version": "echo \"{ \\\"version\\\": \\\"`git rev-parse HEAD`\\\" }\" > docs/version.json"
   },
   "repository": {
     "type": "git",
@@ -23,7 +22,6 @@
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "irma-web-frontend": "^0.2.0",
     "qrcode": "^1.4.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.2",

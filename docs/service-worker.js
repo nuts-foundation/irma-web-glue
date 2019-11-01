@@ -1,4 +1,4 @@
-var CACHE_NAME = 'irma-web-glue-cache';
+var CACHE_NAME = 'irma-web-glue-cache-2';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -6,10 +6,7 @@ self.addEventListener('install', function(event) {
       .then(function(cache) {
         return cache.addAll([
           'index.html',
-          'irma-web-glue.min.js',
-          'irma-web-frontend/irma-web-frontend.min.css',
-          'irma-web-frontend/fonts/Roboto/Roboto-Light.ttf',
-          'irma-web-frontend/fonts/Roboto/Roboto-LightItalic.ttf'
+          'irma-web-glue.min.js'
         ]);
       })
   );
