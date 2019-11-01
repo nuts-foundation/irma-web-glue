@@ -14021,15 +14021,15 @@ function () {
         showHelper: false,
         translations: {
           header: 'Inloggen met <i class="irma-web-logo">IRMA</i>',
-          helper: 'Kom je er niet uit? Kijk dan eerst eens op <a href="https://privacybydesign.foundation/irma-begin/">de website van IRMA</a>.',
+          helper: 'Kom je er niet uit? Kijk dan eerst eens op <a href="https://irma.app/">de website van IRMA</a>.',
           loading: 'Eén moment alsjeblieft',
           button: 'Open IRMA app',
           qrCode: 'Toon QR code',
           app: 'Volg de instructies in de IRMA app',
           retry: 'Opnieuw proberen',
           back: 'Ga terug',
-          cancelled: 'Je hebt ervoor gekozen te weigeren in de IRMA app. Het spijt ons, maar dan kunnen we je niet inloggen',
-          timeout: 'Sorry, we hebben te lang niks van je gehoord',
+          cancelled: 'We hebben de attributen niet ontvangen. Het spijt ons, maar dan kunnen we je niet inloggen',
+          timeout: 'Sorry! We hebben te lang<br/>niks van je gehoord',
           error: 'Sorry! Er is een fout opgetreden',
           browser: 'Het spijt ons, maar je browser voldoet niet aan de minimale eisen',
           success: 'Gelukt!'
@@ -14142,22 +14142,22 @@ function () {
   }, {
     key: "_stateCancelled",
     value: function _stateCancelled() {
-      return "\n      <!-- State: Cancelled -->\n      <p>".concat(this._options.translations.cancelled, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
+      return "\n      <!-- State: Cancelled -->\n      <div class=\"irma-web-forbidden-animation\"></div>\n      <p>".concat(this._options.translations.cancelled, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
     }
   }, {
     key: "_stateTimedOut",
     value: function _stateTimedOut() {
-      return "\n      <!-- State: TimedOut -->\n      <p>".concat(this._options.translations.timeout, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
+      return "\n      <!-- State: TimedOut -->\n      <div class=\"irma-web-clock-animation\"></div>\n      <p>".concat(this._options.translations.timeout, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
     }
   }, {
     key: "_stateError",
     value: function _stateError() {
-      return "\n      <!-- State: Error -->\n      <p>".concat(this._options.translations.error, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
+      return "\n      <!-- State: Error -->\n      <div class=\"irma-web-forbidden-animation\"></div>\n      <p>".concat(this._options.translations.error, "</p>\n      <p><a data-irma-glue-transition=\"restart\">").concat(this._options.translations.retry, "</a></p>\n    ");
     }
   }, {
     key: "_stateBrowserNotSupported",
     value: function _stateBrowserNotSupported() {
-      return "\n      <!-- State: Error -->\n      <p>".concat(this._options.translations.browser, "</p>\n    ");
+      return "\n      <!-- State: BrowserNotSupported -->\n      <div class=\"irma-web-forbidden-animation\"></div>\n      <p>".concat(this._options.translations.browser, "</p>\n    ");
     }
   }, {
     key: "_stateSuccess",
