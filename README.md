@@ -167,7 +167,7 @@ for all options. An example:
 
 ```javascript
 const options = {
-  frontEndOptions: {
+  frontendOptions: {
     showHelper: true,
     translations: {
       helper: 'Hello world 🌍'
